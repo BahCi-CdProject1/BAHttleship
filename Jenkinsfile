@@ -28,6 +28,16 @@ pipeline {
                 }
             }
         }
+        stage('Push image to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpwd')]) {
+                        sh 'docker login -u 0xniel -p ${dockerpwd}'
+                    }
+                    sh 'docker push 0xniel/bahttleship'
+                }
+            }
+        }
 
     }
 }
