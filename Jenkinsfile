@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools{
         nodejs "Node"
-        docker "Docker"
     }
     stages {
         stage("Pull from Github Repo") {
