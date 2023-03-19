@@ -1,6 +1,11 @@
 def app
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'ubuntu'
+            args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
+        }
+    }
     tools{
         nodejs "Node"
     }
