@@ -3,7 +3,7 @@ pipeline {
     agent {
         docker {
             image 'ubuntu'
-            args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
+            args '-u root:sudo -v $HOME/workspace/bahttleship:/bahttleship'
         }
     }
     tools{
