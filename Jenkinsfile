@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { dockerfile true }
     tools{
         nodejs "Node"
     }
@@ -16,11 +16,13 @@ pipeline {
                 }
             }
         }    
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build --platform linux/amd64 -t bahttleship .'
+                }
+            }
+        }
 
-        // stage("Push file to web instance") {
-        //     steps {
-        //         sh "scp -r -v -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/test-app1.pem /var/lib/jenkins/workspace/pipeline-test1/web*/* ubuntu@10.64.10.1:/var/www/html"
-        //     }
-        // }
     }
 }
