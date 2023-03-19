@@ -3,10 +3,14 @@ pipeline {
     tools{
         nodejs "Node"
     }
+    def app
     stages {
         stage("Pull from Github Repo") {
             steps {
-                sh "git pull https://github.com/BahCi-CdProject1/BAHttleship.git"
+                // sh "git pull https://github.com/BahCi-CdProject1/BAHttleship.git"
+                script{
+                    checkout scm
+                }
             }
         }
         stage("Build"){
