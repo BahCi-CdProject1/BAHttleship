@@ -1,12 +1,6 @@
 def app
 pipeline {
-    agent {
-        any
-        // docker {
-        //     image 'ubuntu'
-        //     args '-u root:sudo -v $HOME/workspace/Docker_Pipeline:/bahttleship'
-        // }
-    }
+    agent any
     tools{
         nodejs "Node"
     }
