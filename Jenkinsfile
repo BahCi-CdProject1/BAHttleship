@@ -1,12 +1,17 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:lts-bullseye-slim' 
+            args '-p 3000:3000' 
+        }
+    }
     // tools{
     //     maven 'maven_3_5_0'
     // }
     stages {
-        stage("First"){
+        stage("Build"){
             steps {
-                sh "echo 'Hello!'"
+                sh "npm install"
             }
         }    
         // stage("Pull from Github Repo") {
