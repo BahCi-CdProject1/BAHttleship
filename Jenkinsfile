@@ -18,8 +18,8 @@ pipeline {
         }    
         stage('Build docker image'){
             steps{
-                docker(docker: 'Docker') {
-                    sh 'docker build --platform linux/amd64 -t bahttleship .'
+                script {
+                    app = docker.build(bahttleship)
                 }
             }
         }
