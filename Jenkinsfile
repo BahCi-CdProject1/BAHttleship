@@ -19,7 +19,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script {
-                    app = docker.build(bahttleship)
+                    app = docker.build("bahttleship")
                 }
             }
         }
