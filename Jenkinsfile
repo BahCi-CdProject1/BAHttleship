@@ -18,7 +18,7 @@ pipeline {
         }    
         stage('Build docker image'){
             steps{
-                script{
+                docker(docker: 'Docker') {
                     sh 'docker build --platform linux/amd64 -t bahttleship .'
                 }
             }
