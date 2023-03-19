@@ -1,9 +1,10 @@
+def app
 pipeline {
     agent any
     tools{
         nodejs "Node"
     }
-    def app
+
     stages {
         stage("Pull from Github Repo") {
             steps {
