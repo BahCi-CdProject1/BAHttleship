@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    // tools{
-    //     maven 'maven_3_5_0'
-    // }
+    tools{
+        nodejs "node"
+    }
     stages {
         stage("Build"){
             steps {
