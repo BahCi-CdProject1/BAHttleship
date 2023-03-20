@@ -40,11 +40,13 @@ pipeline {
         }
         stage("Deploy to k8") {
             steps {
-                script {
-                    withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://8622FE57C97489289EB482BB6016F1A7.gr7.us-east-1.eks.amazonaws.com']) {
-                        sh 'kubectl apply -f bahttleship-deployment.yaml'
+                withAWS(credentials: 'my_credential', region: 'us-east-1') {
+                    script {
+                        sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
+                        sh "kubectl apply -f bahttleship-deployment.yaml"
                     }
                 }
+                
             }
         }
 
