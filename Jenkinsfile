@@ -38,6 +38,15 @@ pipeline {
                 }
             }
         }
+        stage("Deploy to k8") {
+            steps {
+                script {
+                    withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://8622FE57C97489289EB482BB6016F1A7.gr7.us-east-1.eks.amazonaws.com']) {
+                        sh 'kubectl apply -f bahttleship-deployment.yaml'
+                    }
+                }
+            }
+        }
 
     }
 }
