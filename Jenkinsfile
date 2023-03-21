@@ -19,7 +19,7 @@ pipeline {
                     sh 'npm install'
                 }
             }
-        }
+        }  
         stage('Test') {
             steps {
                 echo 'Testing...'
@@ -28,7 +28,7 @@ pipeline {
                 snykTokenId: 'Snyk-token'
                 )
             }
-        }    
+        }
         stage('Build docker image'){
             steps{
                 script {
