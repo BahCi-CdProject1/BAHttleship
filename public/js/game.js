@@ -67,7 +67,7 @@ var config = {
       
     this.socket.on('scoreUpdate', function (scores) {
       self.blueScoreText.setText('Blue: ' + scores.blue);
-      self.redScoreText.setText('Red: ' + scores.red);
+      self.redScoreText.setText('Red: ' + scores.red); 
     });
 
     this.socket.on('starLocation', function (starLocation) {
