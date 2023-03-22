@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: bahttleship
-        image: docker.io/0xniel/bahttleship
+        image: docker.io/0xniel/bahttleship:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
