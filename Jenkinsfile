@@ -30,7 +30,7 @@ pipeline {
                         try {
                             sh('kubectl delete service bahttleship')
                             sh('kubectl delete job bahttleship-job')
-                            //sh('kubectl delete job selenium-job')
+                            sh('kubectl delete job selenium-job')
                         } catch (Exception e) {
                             printIn "An error occured during the post-stage: ${e.message}"
                         }
