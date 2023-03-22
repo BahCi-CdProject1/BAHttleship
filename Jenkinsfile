@@ -26,7 +26,7 @@ pipeline {
                 sh 'echo Testing...'
                 sh 'ls -la'
                 sh 'snyk -v'
-                sh 'snyk config set api=Snyk-token'
+                sh 'snyk test'
                 // snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
                 // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
                 //     sh 'snyk -v'
