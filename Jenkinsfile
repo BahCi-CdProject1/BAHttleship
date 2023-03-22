@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh 'echo Testing...'
                 sh 'ls -la'
-                snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile, package.json'
+                snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
                 // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
                 //     sh 'snyk -v'
                 // }
