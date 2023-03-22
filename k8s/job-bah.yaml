@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: bahttleship-job
+    labels:
+      app: bahttleship
+spec:
+    completions: 1
+    template:
+      metadata:
+        labels:
+          app: bahttleship
+      spec:
+        containers:
+          - name: selenium
+            image: 0xniel/bahttleship
+            ports:
+            - containerPort: 8081
+        restartPolicy: Never
