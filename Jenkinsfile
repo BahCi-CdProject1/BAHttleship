@@ -24,9 +24,10 @@ pipeline {
             steps {
                 sh 'echo Testing...'
                 sh 'ls -la'
-                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
-
-                // }
+                
+                snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
+                    sh 'snyk -v'
+                }
             }
         }
         // stage('Build docker image'){
