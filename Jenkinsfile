@@ -34,7 +34,7 @@ pipeline {
                 sh 'echo Testing...'
                 sh 'ls -la'
                 sh 'snyk -v'
-                sh 'snyk container test app'
+                sh 'snyk container test 0xniel/bahttleship'
             }
         }
         // stage('Push image to Docker Hub') {
