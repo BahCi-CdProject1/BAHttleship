@@ -31,7 +31,7 @@ pipeline {
                         sh "kubectl create -f k8s/job-sel.yaml"
                         def podSel = sh(script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podSel = ${podSel}"
-                        sh "kubectl wait pod ${podSel} --for=condition=Completed --timeout=60s"
+                        sh "kubectl wait pod ${podSel} --for=status=Completed --timeout=60s"
                         def podRun = sh(script: "kubectl logs ${podSel}", returnStdout: true)
                         println "Selenium Test Results \n${podRun}"
                     }
