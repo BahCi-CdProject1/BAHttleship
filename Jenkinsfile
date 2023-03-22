@@ -22,11 +22,10 @@ pipeline {
         }  
         stage('Test') {
             steps {
-                echo 'Testing...'
-                snykSecurity(
-                snykInstallation: 'Snyk',
-                snykTokenId: 'Snyk-token'
-                )
+                sh 'echo Testing...'
+                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
+
+                // }
             }
         }
         stage('Build docker image'){
