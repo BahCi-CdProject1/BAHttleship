@@ -17,7 +17,7 @@ pipeline {
                         sh "kubectl create -f k8s/job-bah.yaml"
                         def podBah = sh(script: "kubectl get pods -l job-name=bahttleship-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podBah = ${podBah}"
-                        sh "kubectl wait ${podBah} --for=condition=Ready --timeout=60s"
+                        sh "kubectl wait pod ${podBah} --for=condition=Ready --timeout=60s"
                         sh "kubectl create -f k8s/svc-dns.yaml"
                     }
                 }
