@@ -22,16 +22,18 @@ pipeline {
                 }
             }
         }
-        stage('Cleanup Dev Pods') {
-            steps {
-                withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
-                    script {
-                        sh('kubectl delete service bahttleship')
-                        sh('kubectl delete job bahttleship-job')
-                        //sh('kubectl delete job selenium-job')          
+    }
+    post('Cleanup Dev Pods') {
+            always {
+                steps {
+                    withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+                        script {
+                            sh('kubectl delete service bahttleship')
+                            sh('kubectl delete job bahttleship-job')
+                            //sh('kubectl delete job selenium-job')          
+                        }
                     }
                 }
             }
         }
     }
-}
