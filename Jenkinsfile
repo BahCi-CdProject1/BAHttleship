@@ -25,7 +25,6 @@ pipeline {
             }
             }
         }
-        }
         stage('Run Selenium Test') {
             steps {
                 script {
@@ -72,3 +71,4 @@ pipeline {
       }
     }
   }
+}
