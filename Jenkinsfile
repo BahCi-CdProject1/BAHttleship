@@ -32,7 +32,7 @@ pipeline {
                 //     sh 'snyk -v'
                 // }
             }
-        // }
+        }
         // stage('Build docker image'){
         //     steps{
         //         script {
