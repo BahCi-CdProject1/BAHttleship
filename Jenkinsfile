@@ -15,10 +15,7 @@ pipeline {
                     script {
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-bah.yaml"
-                        def podBah = sh(
-                            script: "kubectl get pods -l job-name=bahttleship-job -o jsonpath='{.items[0].metadata.name}'",
-                            returnStdout: true
-                            ).trim()
+                        def podBah = sh("kubectl get pods -l job-name=bahttleship-job -o jsonpath='{.items[0].metadata.name}'")
                         sh "kubectl wait ${podBah} --for=condition=Ready --timeout=60s"
                         sh "kubectl create -f k8s/svc-dns.yaml"
                     }
