@@ -5,9 +5,7 @@ pipeline {
     //     nodejs "Node",
     //     maven 'maven-3.9.1'
     // }
-    environment {
-        SNYK_TOKEN = credentials('Snyk-token')
-    }
+
     stages {
         stage("Pull from Github Repo") {
             steps {
