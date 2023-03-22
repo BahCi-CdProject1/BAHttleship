@@ -12,50 +12,13 @@ pipeline {
         stage("Run Bah Job to deploy app") {
             steps {
                 script {
-                    def jobBah = readFile('k8s/job-bah.yaml')
-                    def deployResult = kubernetesDeploy(
-                        kubeYaml: jobBah,
-                        deployType: 'create',
-                        wait: true
-                        )
-                        if (deployResult.status != 'Success') {
-                        error("Failed to deploy job: ${deployResult.message}")
-                        }
-            }
-            }
-        }
-        stage('Run Selenium Test') {
-            steps {
-                script {
-                    def jobSel = readFile('k8s/job-sel.yaml')
-                    
-                    //deploy the selenium pod
-                    def deployResult = kubernetesDeploy(
-                        kubeYaml: jobSel,
-                        deployType: 'create',
-                        wait: true
-                        )
-                        if (deployResult.status != 'Success') {
-                        error("Failed to deploy job: ${deployResult.message}")
-                        }
-                    //find the pod name
-                    def podName = sh(
+                    sh "kubectl create -f k8s/job-bah.yaml"
+                    def podBah = sh(
                         script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'",
                         returnStdout: true
-                    ).trim()
-
-                    // wait for the pod to complete the job
-                    sh "kubectl wait --for=condition=complete pod/${podName}"
-                    
-                    // get the logs for the pod
-                    def logs = sh(
-                        script: "kubectl logs ${podName}",
-                        returnStdout: true
-                    )
-                    
-                    // print the logs to the console
-                    echo "Job logs:\n${logs}"
-
+                        ).trim()
+                    sh "kubectl wait ${podBah} --for=condition=Ready --timeout=60s"
+                    sh "kubectl create -f k8s/svc-dns.yaml"
                 }
             }
         }
@@ -64,7 +27,7 @@ pipeline {
                 script {
                     sh('kubectl delete service bahttleship')
                     sh('kubectl delete job bahttleship-job')
-                    sh('kubectl delete job selenium-job')          
+                    //sh('kubectl delete job selenium-job')          
                 }
             }
         }
