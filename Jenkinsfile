@@ -21,6 +21,7 @@ pipeline {
                             ).trim()
                         sh "kubectl wait ${podBah} --for=condition=Ready --timeout=60s"
                         sh "kubectl create -f k8s/svc-dns.yaml"
+                    }
                 }
             }
         }
@@ -31,8 +32,9 @@ pipeline {
                         sh('kubectl delete service bahttleship')
                         sh('kubectl delete job bahttleship-job')
                         //sh('kubectl delete job selenium-job')          
+                    }
                 }
             }
         }
     }
-  }
+}
