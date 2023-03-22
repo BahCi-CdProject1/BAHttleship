@@ -23,6 +23,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo Testing...'
+                sh 'ls -la'
                 // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
 
                 // }
