@@ -30,7 +30,15 @@ pipeline {
                     script {
                         try {
                             sh('kubectl delete service bahttleship')
+                        } catch (Exception e) {
+                            println "An error occured during the post-stage: ${e.message}"
+                        }
+                        try {
                             sh('kubectl delete job bahttleship-job')
+                        } catch (Exception e) {
+                            println "An error occured during the post-stage: ${e.message}"
+                        }
+                        try {
                             sh('kubectl delete job selenium-job')
                         } catch (Exception e) {
                             println "An error occured during the post-stage: ${e.message}"
