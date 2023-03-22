@@ -2,14 +2,48 @@ def app
 pipeline {
     agent any
     stages {
-        stage("Pull from Github Repo") {
+        stage('Checkout SCM') {
             steps {
                 script{
                     checkout scm
                 }
             }
         }
-        stage("Run Bah Job to deploy app") {
+        stage('Build - Dependencies') {
+            steps {
+                nodejs(nodeJSInstallationName: 'Node') {
+                    sh 'npm install'
+                }
+            }
+        }  
+        stage('Test') {
+            steps {
+                sh 'echo Testing...'
+                sh 'ls -la'
+                // snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
+                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
+                //     sh 'snyk -v'
+                // }
+            }
+        }
+        stage('Build - Docker Build') {
+            steps{
+                script {
+                    app = docker.build("0xniel/bahttleship")
+                }
+            }
+        }
+        stage('Build - Docker Push') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpwd')]) {
+                        sh 'docker login -u 0xniel -p ${dockerpwd}'
+                    }
+                    sh 'docker push 0xniel/bahttleship'
+                }
+            }
+        }
+        stage('Test - Deploy Dev Pod') {
             steps {
                 withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
                     script {
@@ -23,7 +57,7 @@ pipeline {
                 }
             }
         }
-        stage("Run Selenium Test") {
+        stage('Test - Deploy Selenium') {
             steps {
                 withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
                     script {
@@ -39,7 +73,7 @@ pipeline {
             }
         }
     }
-    post('Cleanup Dev Pods') {
+    post('Post Actions') {
         always {
             withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
                 script {
@@ -61,6 +95,28 @@ pipeline {
                 }
             }
         }
+        success {
+            withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+                script {
+                    sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
+                    sh "kubectl apply -f bahttleship-deployment.yaml"
+                }
+            }
+        }
+        failure {
+            script {
+                def build = currentBuild.rawBuild
+                def result = currentBuild.result
+
+                // Summarize the errors that caused the failure
+                def failureCauses = build.getFailureCauses()
+                def errorSummary = failureCauses.collect {
+                    "- ${it.getShortDescription()}"
+                }.join("\n")
+
+                // Print the error summary to the console
+                println "Pipeline failed with errors:\n${errorSummary}"
+            }
+        }
     }
-}
-    
+}    
