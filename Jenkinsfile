@@ -21,25 +21,22 @@ pipeline {
                 }
             }
         }  
+        stage('Build docker image'){
+            steps{
+                script {
+                    app = docker.build("0xniel/bahttleship")
+                }
+            }
+        }
+
         stage('Test') {
             steps {
                 sh 'echo Testing...'
                 sh 'ls -la'
                 sh 'snyk -v'
-                sh 'snyk code test'
-                // snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
-                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
-                //     sh 'snyk -v'
-                // }
+                sh 'snyk container test app'
             }
         }
-        // stage('Build docker image'){
-        //     steps{
-        //         script {
-        //             app = docker.build("0xniel/bahttleship")
-        //         }
-        //     }
-        // }
         // stage('Push image to Docker Hub') {
         //     steps {
         //         script {
