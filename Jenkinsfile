@@ -1,11 +1,6 @@
 def app
 pipeline {
     agent any
-    // tools{
-    //     nodejs "Node",
-    //     maven 'maven-3.9.1'
-    // }
-
     stages {
         stage("Pull from Github Repo") {
             steps {
@@ -14,51 +9,66 @@ pipeline {
                 }
             }
         }
-        stage("Build"){
-            steps {
-                nodejs(nodeJSInstallationName: 'Node') {
-                    sh 'npm install'
-                }
-            }
-        }  
-        stage('Test') {
-            steps {
-                sh 'echo Testing...'
-                sh 'ls -la'
-                // snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
-                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
-                //     sh 'snyk -v'
-                // }
-            }
-        }
-        stage('Build docker image'){
-            steps{
-                script {
-                    app = docker.build("0xniel/bahttleship")
-                }
-            }
-        }
-        stage('Push image to Docker Hub') {
+        stage("Run Bah Job to deploy app") {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpwd')]) {
-                        sh 'docker login -u 0xniel -p ${dockerpwd}'
-                    }
-                    sh 'docker push 0xniel/bahttleship'
-                }
+                    sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
+                    def jobBah = readFile('k8s/job-bah.yaml')
+                    def deployResult = kubernetesDeploy(
+                        kubeYaml: jobBah,
+                        deployType: 'create',
+                        wait: true
+                        )
+                        if (deployResult.status != 'Success') {
+                        error("Failed to deploy job: ${deployResult.message}")
+                        }
+            }
             }
         }
-        stage("Deploy to k8") {
+        }
+        stage('Run Selenium Test') {
             steps {
-                withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
-                    script {
-                        sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
-                        sh "kubectl apply -f bahttleship-deployment.yaml"
-                    }
-                }
-                
+                script {
+                    def jobSel = readFile('k8s/job-sel.yaml')
+                    
+                    //deploy the selenium pod
+                    def deployResult = kubernetesDeploy(
+                        kubeYaml: jobSel,
+                        deployType: 'create',
+                        wait: true
+                        )
+                        if (deployResult.status != 'Success') {
+                        error("Failed to deploy job: ${deployResult.message}")
+                        }
+                    //find the pod name
+                    def podName = sh(
+                        script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'",
+                        returnStdout: true
+                    ).trim()
+
+                    // wait for the pod to complete the job
+                    sh "kubectl wait --for=condition=complete pod/${podName}"
+                    
+                    // get the logs for the pod
+                    def logs = sh(
+                        script: "kubectl logs ${podName}",
+                        returnStdout: true
+                    )
+                    
+                    // print the logs to the console
+                    echo "Job logs:\n${logs}"
+
             }
         }
 
+        stage('Cleanup Dev Pods') {
+        steps {
+            script {
+                sh('kubectl delete service bahttleship')
+                sh('kubectl delete job bahttleship-job')
+                sh('kubectl delete job selenium-job')          
+            }
+        }
+      }
     }
-}
+  }
