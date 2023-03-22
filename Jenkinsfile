@@ -57,18 +57,17 @@ pipeline {
                     // print the logs to the console
                     echo "Job logs:\n${logs}"
 
+                }
             }
         }
-
         stage('Cleanup Dev Pods') {
-        steps {
-            script {
-                sh('kubectl delete service bahttleship')
-                sh('kubectl delete job bahttleship-job')
-                sh('kubectl delete job selenium-job')          
+            steps {
+                script {
+                    sh('kubectl delete service bahttleship')
+                    sh('kubectl delete job bahttleship-job')
+                    sh('kubectl delete job selenium-job')          
+                }
             }
         }
-      }
     }
   }
-}
