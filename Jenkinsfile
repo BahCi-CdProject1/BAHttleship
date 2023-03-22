@@ -12,7 +12,6 @@ pipeline {
         stage("Run Bah Job to deploy app") {
             steps {
                 script {
-                    sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                     def jobBah = readFile('k8s/job-bah.yaml')
                     def deployResult = kubernetesDeploy(
                         kubeYaml: jobBah,
