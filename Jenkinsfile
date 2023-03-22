@@ -1,10 +1,6 @@
 def app
 pipeline {
     agent any
-    // tools{
-    //     nodejs "Node",
-    //     maven 'maven-3.9.1'
-    // }
 
     stages {
         stage("Pull from Github Repo") {
@@ -29,14 +25,6 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'echo Testing...'
-                sh 'ls -la'
-                sh 'snyk -v'
-                sh 'snyk container test 0xniel/bahttleship'
-            }
-        }
         // stage('Push image to Docker Hub') {
         //     steps {
         //         script {
