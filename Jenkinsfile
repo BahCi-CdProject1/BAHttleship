@@ -2,7 +2,8 @@
 pipeline {
     agent any
     tools{
-        nodejs "Node"
+        nodejs "Node",
+        maven 'maven-3.9.1'
     }
 
     stages {
@@ -25,9 +26,9 @@ pipeline {
                 sh 'echo Testing...'
                 sh 'ls -la'
                 
-                snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
-                    sh 'snyk -v'
-                }
+                // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
+                //     sh 'snyk -v'
+                // }
             }
         }
         // stage('Build docker image'){
