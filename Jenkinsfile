@@ -37,7 +37,7 @@ pipeline {
         stage('Test - Snyk > Docker Img') {
             steps {
                 snykSecurity(
-                dockerImageName: '0xniel/bahttleship',
+                projectName: '0xniel/bahttleship',
                 failOnIssues: true
                 )
             }
