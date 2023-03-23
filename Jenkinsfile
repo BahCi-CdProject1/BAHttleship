@@ -24,7 +24,7 @@ pipeline {
                 // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
                 //     sh 'snyk -v'
                 // }
-                sh 'snyk test --file Dockerfile'
+                sh 'snyk test --file=Dockerfile'
             }
         }
         stage('Build - Docker Build') {
