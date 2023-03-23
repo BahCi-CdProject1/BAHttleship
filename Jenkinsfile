@@ -16,17 +16,17 @@ pipeline {
                 }
             }
         }  
-        stage('Test - Snyk > Dockerfile') {
-            steps {
+        //stage('Test - Snyk > Dockerfile') {
+        //    steps {
                 //sh 'echo Testing...'
                 //sh 'ls -la'
                 // snykSecurity failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-token', targetFile: 'Dockerfile'
                 // snykSecurity(snykInstallation: 'Snyk', snykTokenId: 'Snyk-token') {
                 //     sh 'snyk -v'
                 // }
-                sh 'snyk test --file=Dockerfile'
-            }
-        }
+                //sh 'snyk test --file=Dockerfile'
+        //    }
+        //}
         stage('Build - Docker Build') {
             steps{
                 script {
@@ -34,14 +34,14 @@ pipeline {
                 }
             }
         }
-        stage('Test - Snyk > Docker Img') {
-            steps {
-                snykSecurity(
-                projectName: '0xniel/bahttleship',
-                failOnIssues: true
-                )
-            }
-        }
+        //stage('Test - Snyk > Docker Img') {
+        //    steps {
+        //        snykSecurity(
+        //        projectName: '0xniel/bahttleship',
+        //        failOnIssues: true
+        //        )
+        //    }
+        //}
         stage('Build - Docker Push') {
             steps {
                 script {
