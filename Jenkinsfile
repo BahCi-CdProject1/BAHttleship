@@ -39,7 +39,7 @@ pipeline {
                     script {
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-bah.yaml"
-                        sleep 5
+                        sleep 15
                         def podBah = sh(script: "kubectl get pods -l job-name=bahttleship-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podBah = ${podBah}"
                         sh "kubectl wait pod ${podBah} --for=condition=Ready --timeout=60s"
@@ -52,9 +52,10 @@ pipeline {
             steps {
                 withAWS(credentials: 'my_credential', endpointUrl: 'https://A2A4A65B30311025651956EB24CBED65.gr7.us-east-1.eks.amazonaws.com') {
                     script {
+                        sleep 15
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-sel.yaml"
-                        sleep 5
+                        sleep 30
                         def podSel = sh(script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podSel = ${podSel}"
                         sh "kubectl wait pod ${podSel} --for=jsonpath='{.status.phase}'=Succeeded --timeout=60s"

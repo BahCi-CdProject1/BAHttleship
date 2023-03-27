@@ -25,7 +25,7 @@ capabilities = {
 try:
     driver.get("http://bahttleship:8081/")
     assert "no such file or directory" not in driver.page_source
-    time.sleep(3)
+    time.sleep(10)
     #Test correct index page has loaded
     print("Selenium Test Started")
     print("")
@@ -41,7 +41,7 @@ try:
 
     #Test link & navigate to 2nd test element
     driver.find_element("id", "play").click()
-    time.sleep(3)
+    time.sleep(10)
     assert "http://bahttleship:8081/game.html" in driver.current_url    
     print(t1url + " --- PASS")
     print("")
