@@ -15,7 +15,7 @@ spec:
           - name: drozkiedh
         containers:
           - name: selenium
-            image: drozkie/drozkiehoh:dns1.0.3
+            image: drozkie/drozkiehoh:1.0.4
             ports:
             - containerPort: 4444
         restartPolicy: Never

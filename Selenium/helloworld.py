@@ -24,8 +24,8 @@ capabilities = {
 
 try:
     driver.get("http://bahttleship:8081/")
-    assert "no such file or directory" not in driver.page_source
     time.sleep(10)
+    assert "no such file or directory" not in driver.page_source
     #Test correct index page has loaded
     print("Selenium Test Started")
     print("")
