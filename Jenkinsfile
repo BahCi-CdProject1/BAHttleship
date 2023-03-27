@@ -65,7 +65,7 @@ pipeline {
     }
     post('Post Actions') {
         always {
-            withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+            withAWS(credentials: 'my_credential', endpointUrl: 'https://A2A4A65B30311025651956EB24CBED65.gr7.us-east-1.eks.amazonaws.com') {
                 script {
                     try {
                         sh('kubectl delete service bahttleship')
