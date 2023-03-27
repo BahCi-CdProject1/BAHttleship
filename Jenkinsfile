@@ -2,8 +2,9 @@ def app
 pipeline {
     agent any
     stages {
-        stage('Checkout SCM') {
+        stage('Clean WS/Checkout SCM') {
             steps {
+                deleteDir()
                 script{
                     checkout scm
                 }
