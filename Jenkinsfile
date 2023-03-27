@@ -35,7 +35,7 @@ pipeline {
         }
         stage('Test - Deploy Dev Pod') {
             steps {
-                withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+                withAWS(credentials: 'my_credential', endpointUrl: 'https://A2A4A65B30311025651956EB24CBED65.gr7.us-east-1.eks.amazonaws.com') {
                     script {
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-bah.yaml"
@@ -49,7 +49,7 @@ pipeline {
         }
         stage('Test - Deploy Selenium') {
             steps {
-                withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+                withAWS(credentials: 'my_credential', endpointUrl: 'https://A2A4A65B30311025651956EB24CBED65.gr7.us-east-1.eks.amazonaws.com') {
                     script {
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-sel.yaml"
@@ -86,7 +86,7 @@ pipeline {
             }
         }
         success {
-            withAWS(credentials: 'my_credential', endpointUrl: 'https://FC86AB859A592865CC5267C69ABD33CE.gr7.us-east-1.eks.amazonaws.com') {
+            withAWS(credentials: 'my_credential', endpointUrl: 'https://A2A4A65B30311025651956EB24CBED65.gr7.us-east-1.eks.amazonaws.com') {
                 script {
                     sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                     sh "kubectl apply -f bahttleship-deployment.yaml"
