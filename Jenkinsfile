@@ -60,8 +60,7 @@ pipeline {
                         def podSel = sh(script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podSel = ${podSel}"
                         sleep 15
-                        def podPre = sh('kubectl get pod')
-                        println "Pod Check-Up: \n${podPre}"
+                        sh ('kubectl get pod')
                         sh "kubectl wait pod ${podSel} --for=jsonpath='{.status.phase}'=Succeeded --timeout=60s"
                         def podRun = sh(script: "kubectl logs ${podSel}", returnStdout: true)
                         println "Selenium Test Results \n${podRun}"
@@ -102,17 +101,7 @@ pipeline {
         }
         failure {
             script {
-                def build = currentBuild.rawBuild
-                def result = currentBuild.result
-
-                // Summarize the errors that caused the failure
-                def failureCauses = build.getFailureCauses()
-                def errorSummary = failureCauses.collect {
-                    "- ${it.getShortDescription()}"
-                }.join("\n")
-
-                // Print the error summary to the console
-                println "Pipeline failed with errors:\n${errorSummary}"
+                println "Pipeline failed. Application not deployed."
             }
         }
     }
