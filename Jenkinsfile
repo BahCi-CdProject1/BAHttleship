@@ -60,8 +60,8 @@ pipeline {
                         def podSel = sh(script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podSel = ${podSel}"
                         sleep 15
-                        def podPre = sh(script: "kubectl logs ${podSel}", returnStdout: true)
-                        println "Selenium Pod Check-up \n${podPre}"
+                        def podPre = sh('kubectl get pod')
+                        println "Pod Check-Up: \n${podPre}"
                         sh "kubectl wait pod ${podSel} --for=jsonpath='{.status.phase}'=Succeeded --timeout=60s"
                         def podRun = sh(script: "kubectl logs ${podSel}", returnStdout: true)
                         println "Selenium Test Results \n${podRun}"
