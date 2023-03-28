@@ -56,9 +56,12 @@ pipeline {
                         sleep 15
                         sh ('aws eks update-kubeconfig --name terraform-eks-demo --region us-east-1')
                         sh "kubectl create -f k8s/job-sel.yaml"
-                        sleep 30
+                        sleep 20
                         def podSel = sh(script: "kubectl get pods -l job-name=selenium-job -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
                         println "podSel = ${podSel}"
+                        sleep 15
+                        def podPre = sh(script: "kubectl logs ${podSel}", returnStdout: true)
+                        println "Selenium Pod Check-up \n${podPre}"
                         sh "kubectl wait pod ${podSel} --for=jsonpath='{.status.phase}'=Succeeded --timeout=60s"
                         def podRun = sh(script: "kubectl logs ${podSel}", returnStdout: true)
                         println "Selenium Test Results \n${podRun}"
